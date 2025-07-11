@@ -82,17 +82,18 @@
       );
     });
 
-    /* finish screen + postMessage */
+   // FINAL block — sends data to Qualtrics
     timeline.push({
       type: 'html-button-response',
       stimulus: `
-        <h2>Great work! That's how the experimant will work.</h2>
-        <p>Please click continue.</p>
+        <h2>Thank you for completing the experiment.</h2>
+        <p>Please wait while your data is recorded</p>
       `,
       choices: ['Continue'],
       on_finish: function () {
         const data = jsPsych.data.get().values();
-        console.log("Sending jsPsych data to Qualtrics:", data);
+        console.log("Sending jsPsych data to Qualtrics:");
+        console.log(data);
 
         window.parent.postMessage({
           type: "jspsych_complete",
@@ -101,7 +102,7 @@
       }
     });
 
-    /* start jsPsych */
+    //START jsPsych
     jsPsych.init({
       timeline: timeline,
       display_element: 'jspsych-target'
