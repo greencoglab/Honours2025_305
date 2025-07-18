@@ -38,8 +38,8 @@
     }
 
     .image-wrapper {
-      margin-bottom: 120px;
-      padding-top: 30px;
+      margin-bottom: 120px; 
+      padding-top: 30px; // added this line 
       text-align: center;
     }
 
@@ -138,19 +138,19 @@
           questions: [{
             prompt: `<img src="${img_url}" class="test-image"><br><br>Compared to when you first saw this image, the camera distance is...`,
             labels: ["Much farther away", "Slightly farther", "The same", "Slightly closer", "Much closer"],
-            required: true,
-            name: 'distance_rating'
-          }],
-          data: {
-            image_file: img_url.split('/').pop()
-          }
+            required: true
+          }]
         }
       );
     });
 
+    // FINAL block — sends data to Qualtrics
     timeline.push({
       type: 'html-button-response',
-      stimulus: `<h2>Thank you for completing the experiment.</h2><p>Please wait while your data is recorded.</p>`,
+      stimulus: `
+        <h2>Thank you for completing the experiment.</h2>
+        <p>Please wait while your data is recorded</p>
+      `,
       choices: ['Continue'],
       on_finish: function () {
         const data = jsPsych.data.get().values();
@@ -164,6 +164,7 @@
       }
     });
 
+    //START jsPsych
     jsPsych.init({
       timeline: timeline,
       display_element: 'jspsych-target'
