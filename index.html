@@ -10,7 +10,6 @@
   <script src="https://unpkg.com/jspsych@6.3.1/plugins/jspsych-html-keyboard-response.js"></script>
   <script src="https://unpkg.com/jspsych@6.3.1/plugins/jspsych-html-button-response.js"></script>
   <link href="https://unpkg.com/jspsych@6.3.1/css/jspsych.css" rel="stylesheet" />
-
   <style>
     html, body {
       margin: 0;
@@ -19,32 +18,26 @@
       height: 100%;
       background-color: white;
     }
-
     body {
       display: flex;
       justify-content: center;
       align-items: flex-start;
     }
-
     #jspsych-target {
       width: 100%;
       max-width: 1200px;
       padding: 20px;
       box-sizing: border-box;
     }
-
     #jspsych-content {
       text-align: center;
     }
-
     .image-wrapper {
-      margin-bottom: 120px; 
-      padding-top: 30px; // added this line 
+      margin-bottom: 120px;
+      padding-top: 30px;
       text-align: center;
     }
-
-    .image-wrapper img,
-    .test-image {
+    .image-wrapper img, .test-image {
       max-height: 800px;
       width: auto;
       height: auto;
@@ -56,14 +49,13 @@
 </head>
 <body>
   <div id="jspsych-target"></div>
-
   <script>
     const timeline = [];
 
     const preload_images = [
       "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/fixation.png",
       "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/mask.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/baseballbase_c.jpg",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/baseballbase_c.jpg"
       "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/baseballcatch_c.jpg",
       "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/baseballhit_c.jpg",
       "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/basketball_c.jpg",
@@ -109,9 +101,9 @@
       message: '<p>Loading images…</p><p><strong>Please wait.</strong> The experiment will begin automatically.</p>'
     });
 
-    const fixation = "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/fixation.png";
-    const mask = "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/mask.jpg";
-    const target_images = preload_images.filter(img => img.includes('_c.jpg'));
+    const fixation = preload_images[0];
+    const mask = preload_images[1];
+    const target_images = preload_images.slice(2);
 
     target_images.forEach(img_url => {
       timeline.push(
@@ -139,12 +131,35 @@
             prompt: `<img src="${img_url}" class="test-image"><br><br>Compared to when you first saw this image, the camera distance is...`,
             labels: ["Much farther away", "Slightly farther", "The same", "Slightly closer", "Much closer"],
             required: true
-          }]
+          }],
+          data: {
+            trial_type: "camera_distance",
+            image_file: img_url
+          },
+          on_finish: function(data) {
+            data.rating = data.response.Q0;
+            delete data.response;
+          }
+        },
+        {
+          type: 'survey-likert',
+          questions: [{
+            prompt: `How confident are you in your previous response?`,
+            labels: ["Did not see the image", "Not sure", "Pretty sure", "Very sure"],
+            required: true
+          }],
+          data: {
+            trial_type: "confidence_rating",
+            image_file: img_url
+          },
+          on_finish: function(data) {
+            data.confidence = data.response.Q0;
+            delete data.response;
+          }
         }
       );
     });
 
-    // FINAL block — sends data to Qualtrics
     timeline.push({
       type: 'html-button-response',
       stimulus: `
@@ -164,7 +179,6 @@
       }
     });
 
-    //START jsPsych
     jsPsych.init({
       timeline: timeline,
       display_element: 'jspsych-target'
