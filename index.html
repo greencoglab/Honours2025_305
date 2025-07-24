@@ -10,6 +10,7 @@
   <script src="https://unpkg.com/jspsych@6.3.1/plugins/jspsych-html-keyboard-response.js"></script>
   <script src="https://unpkg.com/jspsych@6.3.1/plugins/jspsych-html-button-response.js"></script>
   <link href="https://unpkg.com/jspsych@6.3.1/css/jspsych.css" rel="stylesheet" />
+
   <style>
     html, body {
       margin: 0;
@@ -18,26 +19,32 @@
       height: 100%;
       background-color: white;
     }
+
     body {
       display: flex;
       justify-content: center;
       align-items: flex-start;
     }
+
     #jspsych-target {
       width: 100%;
       max-width: 1200px;
       padding: 20px;
       box-sizing: border-box;
     }
+
     #jspsych-content {
       text-align: center;
     }
+
     .image-wrapper {
       margin-bottom: 120px;
       padding-top: 30px;
       text-align: center;
     }
-    .image-wrapper img, .test-image {
+
+    .image-wrapper img,
+    .test-image {
       max-height: 800px;
       width: auto;
       height: auto;
@@ -49,50 +56,17 @@
 </head>
 <body>
   <div id="jspsych-target"></div>
+
   <script>
     const timeline = [];
 
     const preload_images = [
       "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/fixation.png",
       "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/mask.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/baseballbase_c.jpg"
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/baseballbase_c.jpg",
       "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/baseballcatch_c.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/baseballhit_c.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/basketball_c.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/birthday_c.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/bowling_c.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/boy_game_c.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/boy_pulling_tree_c.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/bride_c.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/bubbles_c.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/construction_c.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/cyclist_trail_c.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/diver_c.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/falcon_c.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/family_toboggan_c.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/fieldhockey_c.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/fireman_c.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/fishing_c.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/footballcatch_c.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/footballkick_c.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/golfhit_C.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/golf_c.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/gymnastics_C.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/highjump_c.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/hockey_c.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/horsejump_c.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/juggler_c.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/lacrosse_c.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/lawnbowler_c.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/pizza_c.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/pool_c.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/soccerkick_c.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/soccer_c.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/squirrel_c.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/tennis_c.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/track_c.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/volleyball_c.jpg",
-      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/woman_and_dog_c.jpg"
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/baseballhit_c.jpg"
+      //STOP ADD IMAGES
     ];
 
     timeline.push({
@@ -101,9 +75,9 @@
       message: '<p>Loading images…</p><p><strong>Please wait.</strong> The experiment will begin automatically.</p>'
     });
 
-    const fixation = preload_images[0];
-    const mask = preload_images[1];
-    const target_images = preload_images.slice(2);
+    const fixation = "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/fixation.png";
+    const mask = "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/mask.jpg";
+    const target_images = preload_images.filter(img => img.includes('_c.jpg'));
 
     target_images.forEach(img_url => {
       timeline.push(
@@ -132,30 +106,16 @@
             labels: ["Much farther away", "Slightly farther", "The same", "Slightly closer", "Much closer"],
             required: true
           }],
-          data: {
-            trial_type: "camera_distance",
-            image_file: img_url
-          },
-          on_finish: function(data) {
-            data.rating = data.response.Q0;
-            delete data.response;
-          }
+          data: { image_file: img_url, question_type: "distance_rating" }
         },
         {
           type: 'survey-likert',
           questions: [{
-            prompt: `How confident are you in your previous response?`,
-            labels: ["Did not see the image", "Not sure", "Pretty sure", "Very sure"],
+            prompt: "How confident are you in your judgment?",
+            labels: ["0 - Did not see the image", "1 - Not sure", "2 - Pretty sure", "3 - Very sure"],
             required: true
           }],
-          data: {
-            trial_type: "confidence_rating",
-            image_file: img_url
-          },
-          on_finish: function(data) {
-            data.confidence = data.response.Q0;
-            delete data.response;
-          }
+          data: { image_file: img_url, question_type: "confidence_rating" }
         }
       );
     });
@@ -171,7 +131,6 @@
         const data = jsPsych.data.get().values();
         console.log("Sending jsPsych data to Qualtrics:");
         console.log(data);
-
         window.parent.postMessage({
           type: "jspsych_complete",
           responses: data
