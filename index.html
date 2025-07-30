@@ -4,16 +4,36 @@
   <meta charset="UTF-8">
   <title>Honours 2025 pilot</title>
   <script src="https://unpkg.com/jspsych@6.3.1/jspsych.js">
-// ======== AUTO-SAVE CSV ========
+// ======== AUTO-SAVE COMPACT DATA ========
 const prolificID = jsPsych.data.getURLVariable('PROLIFIC_PID') || 'debug';
-jsPsych.data.addProperties({prolific: prolificID, experiment: 306});
+jsPsych.data.addProperties({ prolific: prolificID, experiment: 306 });
+
 jsPsych.data.get().addEventListener('finish', () => {
-  const csv = jsPsych.data.get().csv();
-  const enc = encodeURIComponent(csv);
-  // Qualtrics redirect (replace QURL with your Survey link ID)
-  window.location.href = 'https://qtrial.qualtrics.com/jfe/form/QURL?DATA=' + enc;
+
+  /* grab ratings only */
+  const first  = jsPsych.data.get().filter({phase:'first'});
+  const repeat = jsPsych.data.get().filter({phase:'repeat'});
+
+  const dist = first.select('key_press').values
+                    .map(k => jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(k))
+                    .join(',');
+
+  const conf = repeat.select('response').values
+                     .map(r => JSON.parse(r)[1])   /* second Likert */
+                     .join(',');
+
+  const packed  = dist + '|' + conf;              // ~160 chars
+  const encoded = encodeURIComponent(packed);
+
+  /* !!! replace the URL below with YOUR real survey link !!! */
+  const qualURL = 'https://YOURQUALTRICSID.qualtrics.com/jfe/form/SVID'
+                + '?PROLIFIC_PID=' + prolificID
+                + '&DATA=' + encoded;
+
+  window.location.href = qualURL;                 // seamless redirect
 });
-// =================================
+// =========================================
+
 
 </script>
   <script src="https://unpkg.com/jspsych@6.3.1/plugins/jspsych-preload.js"></script>
