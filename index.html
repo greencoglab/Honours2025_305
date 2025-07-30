@@ -8,30 +8,6 @@
 const prolificID = jsPsych.data.getURLVariable('PROLIFIC_PID') || 'debug';
 jsPsych.data.addProperties({ prolific: prolificID, experiment: 306 });
 
-jsPsych.data.get().addEventListener('finish', () => {
-
-  /* grab ratings only */
-  const first  = jsPsych.data.get().filter({phase:'first'});
-  const repeat = jsPsych.data.get().filter({phase:'repeat'});
-
-  const dist = first.select('key_press').values
-                    .map(k => jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(k))
-                    .join(',');
-
-  const conf = repeat.select('response').values
-                     .map(r => JSON.parse(r)[1])   /* second Likert */
-                     .join(',');
-
-  const packed  = dist + '|' + conf;              // ~160 chars
-  const encoded = encodeURIComponent(packed);
-
-  /* !!! replace the URL below with YOUR real survey link !!! */
-  const qualURL = 'https://adelaideunisop.syd1.qualtrics.com/jfe/form/SV_1HUuIUdvD76ITCm'
-                + '?PROLIFIC_PID=' + prolificID
-                + '&DATA=' + encoded;
-
-  window.location.href = qualURL;                 // seamless redirect
-});
 // =========================================
 
 
