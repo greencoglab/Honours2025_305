@@ -4,12 +4,16 @@
   <meta charset="UTF-8">
   <title>Honours 2025 pilot</title>
   <script src="https://unpkg.com/jspsych@6.3.1/jspsych.js">
-// ======== AUTO-SAVE COMPACT DATA ========
+// ======== AUTO-SAVE CSV ========
 const prolificID = jsPsych.data.getURLVariable('PROLIFIC_PID') || 'debug';
-jsPsych.data.addProperties({ prolific: prolificID, experiment: 305 });
-
-// =========================================
-
+jsPsych.data.addProperties({prolific: prolificID, experiment: 306});
+jsPsych.data.get().addEventListener('finish', () => {
+  const csv = jsPsych.data.get().csv();
+  const enc = encodeURIComponent(csv);
+  // Qualtrics redirect (replace QURL with your Survey link ID)
+  window.location.href = 'https://qtrial.qualtrics.com/jfe/form/QURL?DATA=' + enc;
+});
+// =================================
 
 </script>
   <script src="https://unpkg.com/jspsych@6.3.1/plugins/jspsych-preload.js"></script>
@@ -69,8 +73,7 @@ jsPsych.data.addProperties({ prolific: prolificID, experiment: 305 });
     const timeline = [];
 
     const preload_images = [
- //add images!
-      "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/fixation.png",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/fixation.png",
   "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/mask.jpg",
   "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/baseballbase_c.jpg",
   "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/baseballcatch_c.jpg",
@@ -86,6 +89,30 @@ jsPsych.data.addProperties({ prolific: prolificID, experiment: 305 });
   "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/cyclist_trail_c.jpg",
   "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/diver_c.jpg",
   "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/falcon_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/family_toboggan_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/fieldhockey_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/fireman_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/fishing_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/footballcatch_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/footballkick_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/golfhit_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/golf_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/gymnastics_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/highjump_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/hockey_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/horsejump_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/juggler_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/lacrosse_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/lawnbowler_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/pizza_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/pool_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/soccerkick_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/soccer_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/squirrel_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/tennis_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/track_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/volleyball_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/woman_and_dog_c.jpg"
 ];
     
 
@@ -136,7 +163,8 @@ jsPsych.data.addProperties({ prolific: prolificID, experiment: 305 });
             required: true
           }],
           data: { image_file: img_url, question_type: "confidence_rating" }
-          {
+        },
+{
   type: 'survey-likert',
   questions: [{
     prompt: "How emotionally aroused did the image make you feel?",
@@ -145,29 +173,6 @@ jsPsych.data.addProperties({ prolific: prolificID, experiment: 305 });
   }],
   data: { image_file: img_url, question_type: "arousal_rating" }
 }
-          /* — arousal — */
-{
-  type: 'html-keyboard-response',
-  stimulus: /* your arousal prompt */,
-  choices : ['1','2','3','4','5','6','7'],
-  data    : {phase: 'arousal'}
-},
-/* — valence / rating — */
-{
-  type: 'html-keyboard-response',
-  stimulus: /* rating prompt */,
-  choices : ['1','2','3','4','5','6','7'],
-  data    : {phase: 'rating'}
-},
-/* — confidence — */
-{
-  type: 'html-keyboard-response',
-  stimulus: /* confidence prompt */,
-  choices : ['1','2','3','4'],
-  data    : {phase: 'confidence'}
-}
-        },
-
       );
     });
 
@@ -179,28 +184,6 @@ jsPsych.data.addProperties({ prolific: prolificID, experiment: 305 });
       `,
       choices: ['Continue'],
       on_finish: function () {
-    /* -------- compact-ratings packing (distance|confidence|arousal) -------- */
-    const first  = jsPsych.data.get().filter({ phase:'first'  });
-    const repeat = jsPsych.data.get().filter({ phase:'repeat' });
-
-    const dist = first.select('key_press').values
-                      .map(k => jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(k))
-                      .join(',');
-
-    const conf = repeat.select('response').values
-                       .map(r => JSON.parse(r)[1])
-                       .join(',');
-
-    const arous = repeat.select('response').values
-                        .map(r => JSON.parse(r)[0])
-                        .join(',');
-
-    const packed  = dist + '|' + conf + '|' + arous;
-    const encoded = encodeURIComponent(packed);
-
-    const qualURL = "https://adelaideunisop.syd1.qualtrics.com/jfe/form/SV_1HUuIUdvD76ITCm" + '?jspsych_data=' + encoded;
-    window.location.href = qualURL;
-    /* ----------------------------------------------------------------------- */
         const data = jsPsych.data.get().values();
         console.log("Sending jsPsych data to Qualtrics:");
         console.log(data);
@@ -211,40 +194,10 @@ jsPsych.data.addProperties({ prolific: prolificID, experiment: 305 });
       }
     });
 
-jsPsych.init({
-  timeline: timeline,
-  display_element: 'jspsych-target',
-
-  on_finish: function () {
-    /* 1. pull first-image URL */
-    const imgAddress = jsPsych.data.get().filter({phase:'arousal'}).select('stimulus').values[0];
-
-    /* 2. isolate each phase */
-    const ar  = jsPsych.data.get().filter({phase:'arousal'});
-    const ra  = jsPsych.data.get().filter({phase:'rating'});
-    const co  = jsPsych.data.get().filter({phase:'confidence'});
-
-    /* 3. extract values */
-    const arousal       = ar.select('response').values[0];
-    const arousalRT     = ar.select('rt').values[0];
-    const rating        = ra.select('response').values[0];
-    const ratingRT      = ra.select('rt').values[0];
-    const confidence    = co.select('response').values[0];
-    const confidenceRT  = co.select('rt').values[0];
-
-    /* 4. pass to Qualtrics */
-    Qualtrics.SurveyEngine.setEmbeddedData('image_address', imgAddress);
-    Qualtrics.SurveyEngine.setEmbeddedData('arousal',       arousal);
-    Qualtrics.SurveyEngine.setEmbeddedData('arousal_rt',    arousalRT);
-    Qualtrics.SurveyEngine.setEmbeddedData('rating',        rating);
-    Qualtrics.SurveyEngine.setEmbeddedData('rating_rt',     ratingRT);
-    Qualtrics.SurveyEngine.setEmbeddedData('confidence',    confidence);
-    Qualtrics.SurveyEngine.setEmbeddedData('confidence_rt', confidenceRT);
-
-    /* 5. auto-advance Qualtrics page */
-    Qualtrics.SurveyEngine.navNext();
-  }
-});
+    jsPsych.init({
+      timeline: timeline,
+      display_element: 'jspsych-target'
+    });
   </script>
 </body>
 </html>
