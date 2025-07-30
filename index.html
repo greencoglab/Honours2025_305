@@ -136,8 +136,7 @@ jsPsych.data.addProperties({ prolific: prolificID, experiment: 305 });
             required: true
           }],
           data: { image_file: img_url, question_type: "confidence_rating" }
-        },
-{
+          {
   type: 'survey-likert',
   questions: [{
     prompt: "How emotionally aroused did the image make you feel?",
@@ -146,6 +145,29 @@ jsPsych.data.addProperties({ prolific: prolificID, experiment: 305 });
   }],
   data: { image_file: img_url, question_type: "arousal_rating" }
 }
+          /* — arousal — */
+{
+  type: 'html-keyboard-response',
+  stimulus: /* your arousal prompt */,
+  choices : ['1','2','3','4','5','6','7'],
+  data    : {phase: 'arousal'}
+},
+/* — valence / rating — */
+{
+  type: 'html-keyboard-response',
+  stimulus: /* rating prompt */,
+  choices : ['1','2','3','4','5','6','7'],
+  data    : {phase: 'rating'}
+},
+/* — confidence — */
+{
+  type: 'html-keyboard-response',
+  stimulus: /* confidence prompt */,
+  choices : ['1','2','3','4'],
+  data    : {phase: 'confidence'}
+}
+        },
+
       );
     });
 
@@ -189,10 +211,40 @@ jsPsych.data.addProperties({ prolific: prolificID, experiment: 305 });
       }
     });
 
-    jsPsych.init({
-      timeline: timeline,
-      display_element: 'jspsych-target'
-    });
+jsPsych.init({
+  timeline: timeline,
+  display_element: 'jspsych-target',
+
+  on_finish: function () {
+    /* 1. pull first-image URL */
+    const imgAddress = jsPsych.data.get().filter({phase:'arousal'}).select('stimulus').values[0];
+
+    /* 2. isolate each phase */
+    const ar  = jsPsych.data.get().filter({phase:'arousal'});
+    const ra  = jsPsych.data.get().filter({phase:'rating'});
+    const co  = jsPsych.data.get().filter({phase:'confidence'});
+
+    /* 3. extract values */
+    const arousal       = ar.select('response').values[0];
+    const arousalRT     = ar.select('rt').values[0];
+    const rating        = ra.select('response').values[0];
+    const ratingRT      = ra.select('rt').values[0];
+    const confidence    = co.select('response').values[0];
+    const confidenceRT  = co.select('rt').values[0];
+
+    /* 4. pass to Qualtrics */
+    Qualtrics.SurveyEngine.setEmbeddedData('image_address', imgAddress);
+    Qualtrics.SurveyEngine.setEmbeddedData('arousal',       arousal);
+    Qualtrics.SurveyEngine.setEmbeddedData('arousal_rt',    arousalRT);
+    Qualtrics.SurveyEngine.setEmbeddedData('rating',        rating);
+    Qualtrics.SurveyEngine.setEmbeddedData('rating_rt',     ratingRT);
+    Qualtrics.SurveyEngine.setEmbeddedData('confidence',    confidence);
+    Qualtrics.SurveyEngine.setEmbeddedData('confidence_rt', confidenceRT);
+
+    /* 5. auto-advance Qualtrics page */
+    Qualtrics.SurveyEngine.navNext();
+  }
+});
   </script>
 </body>
 </html>
