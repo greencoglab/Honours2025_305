@@ -180,6 +180,26 @@ jsPsych.data.addProperties({ prolific: prolificID, experiment: 305 });
       `,
       choices: ['Continue'],
       on_finish: function () {
+    // ===== Compact data redirect =====
+    const first  = jsPsych.data.get().filter({ phase:'first'  });
+    const repeat = jsPsych.data.get().filter({ phase:'repeat' });
+
+    const dist = first.select('key_press').values
+                      .map(k => jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(k))
+                      .join(',');
+
+    const conf = repeat.select('response').values
+                       .map(r => JSON.parse(r)[1])
+                       .join(',');
+
+    const packed  = dist + '|' + conf;
+    const encoded = encodeURIComponent(packed);
+
+    const qualURL = 'https://adelaideunisop.syd1.qualtrics.com/jfe/form/SV_1HUuIUdvD76ITCm' + '?jspsych_data=' + encoded;
+
+    window.location.href = qualURL;
+    // =========================================
+
         const data = jsPsych.data.get().values();
         console.log("Sending jsPsych data to Qualtrics:");
         console.log(data);
