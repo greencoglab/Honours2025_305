@@ -3,7 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <title>Honours 2025 pilot</title>
-  <script src="https://unpkg.com/jspsych@6.3.1/jspsych.js"></script>
+  <script src="https://unpkg.com/jspsych@6.3.1/jspsych.js">
+// ======== AUTO-SAVE CSV ========
+const prolificID = jsPsych.data.getURLVariable('PROLIFIC_PID') || 'debug';
+jsPsych.data.addProperties({prolific: prolificID, experiment: 306});
+jsPsych.data.get().addEventListener('finish', () => {
+  const csv = jsPsych.data.get().csv();
+  const enc = encodeURIComponent(csv);
+  // Qualtrics redirect (replace QURL with your Survey link ID)
+  window.location.href = 'https://qtrial.qualtrics.com/jfe/form/QURL?DATA=' + enc;
+});
+// =================================
+
+</script>
   <script src="https://unpkg.com/jspsych@6.3.1/plugins/jspsych-preload.js"></script>
   <script src="https://unpkg.com/jspsych@6.3.1/plugins/jspsych-image-keyboard-response.js"></script>
   <script src="https://unpkg.com/jspsych@6.3.1/plugins/jspsych-survey-likert.js"></script>
