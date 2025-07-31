@@ -172,15 +172,32 @@
         <p>Please press continue below</p>
       `,
       choices: ['Continue'],
-      on_finish: function () {
-        const data = jsPsych.data.get().values();
-        console.log("Sending jsPsych data to Qualtrics:");
-        console.log(data);
-        window.parent.postMessage({
-          type: "jspsych_complete",
-          responses: data
-        }, "*");
-      }
+      Download
+ Copy
+on_finish: function () {
+  const rows = jsPsych.data.get().filter({         // keep only the three survey-likert trials
+    question_type: ['distance_rating',
+                    'confidence_rating',
+                    'arousal_rating']
+  }).values();
+
+  // last three rows → distance, confidence, arousal (same image)
+  const distance   = rows.find(r => r.question_type === 'distance_rating');
+  const confidence = rows.find(r => r.question_type === 'confidence_rating');
+  const arousal    = rows.find(r => r.question_type === 'arousal_rating');
+
+  const payload = {
+    image_address  : distance.image_file,
+    rating         : distance.response.Q0,
+    rating_rt      : distance.rt,
+    confidence     : confidence.response.Q0,
+    confidence_rt  : confidence.rt,
+    arousal        : arousal.response.Q0,
+    arousal_rt     : arousal.rt
+  };
+
+  window.parent.postMessage(payload, '*');
+}
     });
 
     jsPsych.init({
