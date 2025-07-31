@@ -70,7 +70,37 @@
   "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/birthday_c.jpg",
   "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/bowling_c.jpg",
   "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/boy_game_c.jpg",
-
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/boy_pulling_tree_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/bride_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/bubbles_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/construction_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/cyclist_trail_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/diver_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/falcon_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/family_toboggan_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/fieldhockey_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/fireman_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/fishing_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/footballcatch_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/footballkick_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/golfhit_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/golf_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/gymnastics_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/highjump_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/hockey_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/horsejump_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/juggler_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/lacrosse_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/lawnbowler_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/pizza_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/pool_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/soccerkick_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/soccer_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/squirrel_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/tennis_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/track_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/volleyball_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/woman_and_dog_c.jpg"
 ];
     
 
@@ -122,22 +152,23 @@
           }],
           data: { image_file: img_url, question_type: "confidence_rating" }
         },
-{
-  type: 'survey-likert',
-  questions: [{
-    prompt: "How emotionally aroused did the image make you feel?",
-    labels: ["Not at all emotionally aroused", "Slightly emotionally aroused", "Moderately emotionally aroused", "Very emotionally aroused", "Highly emotionally aroused"],
-    required: true
-  }],
-  data: { image_file: img_url, question_type: "arousal_rating" }
-}
-      );
-    });
+    {
+      type: 'survey-likert',
+      questions: [{
+        prompt: "How emotionally aroused did the image make you feel?",
+        labels: ["Not at all emotionally aroused", "Slightly emotionally aroused", "Moderately emotionally aroused", "Very emotionally aroused", "Highly emotionally aroused"],
+        required: true
+      }],
+      data: { image_file: img_url, question_type: "arousal_rating" }
+    }
+);
+});
+
 
     timeline.push({
       type: 'html-button-response',
       stimulus: `
-        <h2>Thank you for completing that part of the experiment.</h2>
+         <h2>Thank you for completing that part of the experiment.</h2>
         <p>Please press continue below</p>
       `,
       choices: ['Continue'],
@@ -153,27 +184,9 @@
     });
 
     jsPsych.init({
-    timeline: timeline,
-    display_element: 'jspsych-target',
-
-    on_finish: function() {
-      // Build the result for the most-recent trial
-      const last         = jsPsych.data.get().last(1).values()[0];
-
-      const trial_result = {
-        image_address : last.stimulus,         
-        rating        : last.rating,
-        rating_rt     : last.rating_rt,
-        arousal       : last.arousal,
-        arousal_rt    : last.arousal_rt,
-        confidence    : last.confidence,
-        confidence_rt : last.confidence_rt
-      };
-
-      // Ship it to the parent page (Qualtrics)
-      window.parent.postMessage(trial_result, '*');
-    }
-  });
-</script>
+      timeline: timeline,
+      display_element: 'jspsych-target'
+    });
+  </script>
 </body>
 </html>
