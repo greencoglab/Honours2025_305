@@ -3,19 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Honours 2025 pilot</title>
-  <script src="https://unpkg.com/jspsych@6.3.1/jspsych.js">
-// ======== AUTO-SAVE CSV ========
-const prolificID = jsPsych.data.getURLVariable('PROLIFIC_PID') || 'debug';
-jsPsych.data.addProperties({prolific: prolificID, experiment: 306});
-jsPsych.data.get().addEventListener('finish', () => {
-  const csv = jsPsych.data.get().csv();
-  const enc = encodeURIComponent(csv);
-  // Qualtrics FIX THIS
-  window.location.href = 'https://adelaideunisop.syd1.qualtrics.com/jfe/form/SV_1HUuIUdvD76ITCm=' + enc;
-});
-// =================================
-
-</script>
+  <script src="https://unpkg.com/jspsych@6.3.1/jspsych.js"></script>
   <script src="https://unpkg.com/jspsych@6.3.1/plugins/jspsych-preload.js"></script>
   <script src="https://unpkg.com/jspsych@6.3.1/plugins/jspsych-image-keyboard-response.js"></script>
   <script src="https://unpkg.com/jspsych@6.3.1/plugins/jspsych-survey-likert.js"></script>
@@ -71,14 +59,48 @@ jsPsych.data.get().addEventListener('finish', () => {
 
   <script>
     const timeline = [];
-//don't FORGET IMAGES HERE
+
     const preload_images = [
   "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/fixation.png",
   "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/mask.jpg",
   "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/baseballbase_c.jpg",
   "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/baseballcatch_c.jpg",
   "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/baseballhit_c.jpg",
-
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/basketball_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/birthday_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/bowling_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/boy_game_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/boy_pulling_tree_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/bride_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/bubbles_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/construction_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/cyclist_trail_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/diver_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/falcon_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/family_toboggan_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/fieldhockey_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/fireman_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/fishing_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/footballcatch_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/footballkick_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/golfhit_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/golf_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/gymnastics_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/highjump_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/hockey_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/horsejump_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/juggler_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/lacrosse_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/lawnbowler_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/pizza_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/pool_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/soccerkick_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/soccer_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/squirrel_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/tennis_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/track_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/volleyball_c.jpg",
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/woman_and_dog_c.jpg"
 ];
     
 
@@ -161,25 +183,9 @@ jsPsych.data.get().addEventListener('finish', () => {
     });
 
     jsPsych.init({
-  timeline: timeline,
-  on_finish: function () {
-
-    /* collect the variables you need */
-    const ar = jsPsych.data.get().filter({phase:'arousal'});
-    const ra = jsPsych.data.get().filter({phase:'rating'});
-    const co = jsPsych.data.get().filter({phase:'confidence'});
-
-    const payload = {
-      image_address : jsPsych.data.get().filter({phase:'arousal'}).select('stimulus').values[0],
-      arousal       : ar.select('response').values[0],
-      arousal_rt    : ar.select('rt').values[0],
-      rating        : ra.select('response').values[0],
-      rating_rt     : ra.select('rt').values[0],
-      confidence    : co.select('response').values[0],
-      confidence_rt : co.select('rt').values[0]
-    };
-
-    /* send the object to the parent page (Qualtrics) */
-    window.parent.postMessage(payload, '*');
-  }
-});
+      timeline: timeline,
+      display_element: 'jspsych-target'
+    });
+  </script>
+</body>
+</html>
