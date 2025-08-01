@@ -3,15 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Honours 2025 pilot</title>
-  <script src="https://unpkg.com/jspsych@6.3.1/jspsych.js">
-// ======== AUTO-SAVE COMPACT DATA ========
-const prolificID = jsPsych.data.getURLVariable('PROLIFIC_PID') || 'debug';
-jsPsych.data.addProperties({ prolific: prolificID, experiment: 305 });
-
-// =========================================
-
-
-</script>
+  <script src="https://unpkg.com/jspsych@6.3.1/jspsych.js"></script>
   <script src="https://unpkg.com/jspsych@6.3.1/plugins/jspsych-preload.js"></script>
   <script src="https://unpkg.com/jspsych@6.3.1/plugins/jspsych-image-keyboard-response.js"></script>
   <script src="https://unpkg.com/jspsych@6.3.1/plugins/jspsych-survey-likert.js"></script>
@@ -69,13 +61,12 @@ jsPsych.data.addProperties({ prolific: prolificID, experiment: 305 });
     const timeline = [];
 
     const preload_images = [
- //add images!
-      "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/fixation.png",
-  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/mask.jpg",
-  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/baseballbase_c.jpg",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/fixation.png",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/mask.jpg",
+"https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/baseballbase_c.jpg",
   "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/baseballcatch_c.jpg",
-];
-    
+  "https://raw.githubusercontent.com/greencoglab/Honours2025_305/main/img/baseballhit_c.jpg",
+     ];
 
     timeline.push({
       type: 'preload',
@@ -125,48 +116,27 @@ jsPsych.data.addProperties({ prolific: prolificID, experiment: 305 });
           }],
           data: { image_file: img_url, question_type: "confidence_rating" }
         },
-{
-  type: 'survey-likert',
-  questions: [{
-    prompt: "How emotionally aroused did the image make you feel?",
-    labels: ["Not at all emotionally aroused", "Slightly emotionally aroused", "Moderately emotionally aroused", "Very emotionally aroused", "Highly emotionally aroused"],
-    required: true
-  }],
-  data: { image_file: img_url, question_type: "arousal_rating" }
-}
-      );
-    });
+    {
+      type: 'survey-likert',
+      questions: [{
+        prompt: "How emotionally aroused did the image make you feel?",
+        labels: ["Not at all emotionally aroused", "Slightly emotionally aroused", "Moderately emotionally aroused", "Very emotionally aroused", "Highly emotionally aroused"],
+        required: true
+      }],
+      data: { image_file: img_url, question_type: "arousal_rating" }
+    }
+);
+});
+
 
     timeline.push({
       type: 'html-button-response',
       stimulus: `
-        <h2>Thank you for completing that part of the experiment.</h2>
+         <h2>Thank you for completing that part of the experiment.</h2>
         <p>Please press continue below</p>
       `,
       choices: ['Continue'],
       on_finish: function () {
-    /* -------- compact-ratings packing (distance|confidence|arousal) -------- */
-    const first  = jsPsych.data.get().filter({ phase:'first'  });
-    const repeat = jsPsych.data.get().filter({ phase:'repeat' });
-
-    const dist = first.select('key_press').values
-                      .map(k => jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(k))
-                      .join(',');
-
-    const conf = repeat.select('response').values
-                       .map(r => JSON.parse(r)[1])
-                       .join(',');
-
-    const arous = repeat.select('response').values
-                        .map(r => JSON.parse(r)[0])
-                        .join(',');
-
-    const packed  = dist + '|' + conf + '|' + arous;
-    const encoded = encodeURIComponent(packed);
-
-    const qualURL = "https://adelaideunisop.syd1.qualtrics.com/jfe/form/SV_1HUuIUdvD76ITCm" + '?jspsych_data=' + encoded;
-    window.location.href = qualURL;
-    /* ----------------------------------------------------------------------- */
         const data = jsPsych.data.get().values();
         console.log("Sending jsPsych data to Qualtrics:");
         console.log(data);
