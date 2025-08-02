@@ -148,25 +148,21 @@
     timeline.push({
       type: 'html-button-response',
       stimulus: `
-        <h2>Thank you for completing that portion of the experiment.</h2>
-        <p>Please click continue below</p>
+        <h2>Thank you for completing the experiment.</h2>
+        <p>Please wait while your data is recorded</p>
       `,
       choices: ['Continue'],
       on_finish: function () {
-  const filtered_data = jsPsych.data.get().filter({trial_type: 'survey-likert'}).values();
-  const minimal_data = filtered_data.map(trial => ({
-    image: trial.image,
-    rating: trial.rating
-  }));
+        const data = jsPsych.data.get().values();
+        console.log("Sending jsPsych data to Qualtrics:");
+        jsPsych.data.get().filter({trial_type: "survey-likert"})
+        console.log(data);
 
-  console.log("Sending minimal data to Qualtrics:");
-  console.log(minimal_data);
-
-  window.parent.postMessage({
-    type: "jspsych_complete",
-    responses: minimal_data
-  }, "*");
-}
+        window.parent.postMessage({
+          type: "jspsych_complete",
+          responses: data
+        }, "*");
+      }
     });
 
     //START jsPsych
