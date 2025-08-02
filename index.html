@@ -118,7 +118,10 @@
       `,
       choices: ['Continue'],
       on_finish: function () {
-        const data = jsPsych.data.get().filter({trial_type: "survey-likert"});
+        const data = jsPsych.data
+              .get()
+              .filter({ trial_type: 'survey-likert' })
+              .values();       
         console.log("Sending jsPsych data to Qualtrics:");
         console.log(data);
 
