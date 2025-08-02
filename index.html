@@ -67,6 +67,40 @@
       "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/baseballcatch_c.jpg",
       "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/baseballhit_c.jpg",
       "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/basketball_c.jpg",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/birthday_c.jpg",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/bowling_c.jpg",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/boy_game_c.jpg",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/boy_pulling_tree_c.jpg",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/bride_c.jpg",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/bubbles_c.jpg",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/construction_c.jpg",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/cyclist_trail_c.jpg",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/diver_c.jpg",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/falcon_c.jpg",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/family_toboggan_c.jpg",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/fieldhockey_c.jpg",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/fireman_c.jpg",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/fishing_c.jpg",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/footballcatch_c.jpg",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/footballkick_c.jpg",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/golfhit_C.jpg",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/golf_c.jpg",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/gymnastics_C.jpg",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/highjump_c.jpg",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/hockey_c.jpg",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/horsejump_c.jpg",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/juggler_c.jpg",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/lacrosse_c.jpg",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/lawnbowler_c.jpg",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/pizza_c.jpg",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/pool_c.jpg",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/soccerkick_c.jpg",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/soccer_c.jpg",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/squirrel_c.jpg",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/tennis_c.jpg",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/track_c.jpg",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/volleyball_c.jpg",
+      "https://raw.githubusercontent.com/greencoglab/Honours-2025/main/img/woman_and_dog_c.jpg"
     ];
 
     timeline.push({
@@ -119,24 +153,16 @@
       `,
       choices: ['Continue'],
       on_finish: function () {
-  const filtered_data = jsPsych.data.get().filter({trial_type: 'survey-likert'}).values();
-  const minimal_data = filtered_data.map(trial => {
-    // Extract image filename from the prompt HTML
-    const match = trial.prompt.match(/src=".*\/([^"]+)"/);
-    return {
-      image: match ? match[1] : null,
-      rating: trial.response.Q0
-    };
-  });
+        const data = jsPsych.data.get().filter({trial_type: "survey-likert"})
+        console.log("Sending jsPsych data to Qualtrics:");
+        console.log(data);
 
-  console.log("Sending jsPsych minimal data to Qualtrics:");
-  console.log(minimal_data);
-
-  window.parent.postMessage({
-    type: "jspsych_complete",
-    responses: minimal_data
-  }, "*");
-});
+        window.parent.postMessage({
+          type: "jspsych_complete",
+          responses: data
+        }, "*");
+      }
+    });
 
     //START jsPsych
     jsPsych.init({
