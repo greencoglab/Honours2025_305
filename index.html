@@ -119,17 +119,24 @@
       `,
       choices: ['Continue'],
       on_finish: function () {
-        const data = jsPsych.data.get().values();
-        console.log("Sending jsPsych data to Qualtrics:");
-        jsPsych.data.get().filter({trial_type: "survey-likert"})
-        console.log(data);
+  const filtered_data = jsPsych.data.get().filter({trial_type: 'survey-likert'}).values();
+  const minimal_data = filtered_data.map(trial => {
+    // Extract image filename from the prompt HTML
+    const match = trial.prompt.match(/src=".*\/([^"]+)"/);
+    return {
+      image: match ? match[1] : null,
+      rating: trial.response.Q0
+    };
+  });
 
-        window.parent.postMessage({
-          type: "jspsych_complete",
-          responses: data
-        }, "*");
-      }
-    });
+  console.log("Sending jsPsych minimal data to Qualtrics:");
+  console.log(minimal_data);
+
+  window.parent.postMessage({
+    type: "jspsych_complete",
+    responses: minimal_data
+  }, "*");
+}
 
     //START jsPsych
     jsPsych.init({
